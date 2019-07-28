@@ -19,6 +19,11 @@ use utils 'type_string_slow';
 
 sub run {
     x11_start_program('oowriter');
+    if (match_has_tag('ooffice-tip-of-the-day')) {
+        # Unselect "_S_how tips on startup", select "_O_k"
+        send_key "alt-s";
+        send_key "alt-o";
+    }
     # clicking the writing area to make sure the cursor addressed there
     wait_screen_change { assert_and_click('ooffice-writing-area', timeout => 10) };
     # auto-correction does not handle super-fast typing well

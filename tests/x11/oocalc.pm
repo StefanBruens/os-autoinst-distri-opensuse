@@ -18,6 +18,11 @@ use testapi;
 
 sub run {
     x11_start_program('oocalc');
+    if (match_has_tag('ooffice-tip-of-the-day')) {
+        # Unselect "_S_how tips on startup", select "_O_k"
+        send_key "alt-s";
+        send_key "alt-o";
+    }
     wait_still_screen;    # extra wait because oo sometimes appears to be idle during start
     wait_screen_change { assert_and_click('input-area-oocalc', timeout => 10) };
     type_string "Hello World!\n";

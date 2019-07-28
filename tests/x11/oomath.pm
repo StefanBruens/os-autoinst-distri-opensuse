@@ -20,6 +20,11 @@ use utils 'type_string_slow';
 
 sub run {
     x11_start_program('oomath');
+    if (match_has_tag('ooffice-tip-of-the-day')) {
+        # Unselect "_S_how tips on startup", select "_O_k"
+        send_key "alt-s";
+        send_key "alt-o";
+    }
     # be more resilient during the automatic evaluation of formulas to prevent
     # mistyping
     type_string_slow "E %PHI = H %PHI\nnewline\n1 = 1";
