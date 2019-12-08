@@ -63,6 +63,10 @@ sub run {
     my ($self) = @_;
 
     assert_screen "generic-desktop";
+
+    # install scalable korean font
+    ensure_installed('noto-sans-kr-fonts');
+
     # enable Korean input sources
     ibus_enable_source_kr;
 
