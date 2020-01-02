@@ -26,11 +26,15 @@ use version_utils qw(is_sle is_tumbleweed);
 
 sub run {
     x11_start_program('nautilus');
-    wait_screen_change { send_key 'ctrl-l' };
-    type_string "ftp://ftp.suse.com\n";
-    assert_screen 'nautilus-ftp-login';
+    foreach my $server (qw(ftp.suse.com ftp.gwdg.de)) {
+        send_key_until_needlematch('nautilus-location-bar', 'ctrl-l');
+        type_string "ftp://" . $server . "\n";
+        last if check_screen 'nautilus-ftp-login', 180;
+        send_key 'ret';
+    }
+    assert_screen 'nautilus-ftp-login', 1;
     send_key 'ret';
-    assert_screen 'nautilus-ftp-suse-com';
+    assert_screen 'nautilus-ftp-server-connected';
     if (is_sle('12-SP2+') || is_tumbleweed) {
         assert_and_click 'unselected-pub';
         assert_and_click 'ftp-path-selected';
