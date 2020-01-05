@@ -42,6 +42,16 @@ sub run {
     script_run("kubectl get pods --all-namespaces | tee /dev/$serialdev");
 
     record_info 'Test #5', 'Test: Confirm node is ready';
+    assert_script_run('kubectl get nodes');
+    assert_script_run('kubectl describe nodes');
+    assert_script_run("kubectl describe node localhost | tee /dev/$serialdev");
+    assert_script_run("journalctl -u kubelet | tee /dev/$serialdev");
+    for (1 .. 12) {
+        assert_script_run('kubectl get nodes | grep "Ready"');
+        sleep 5;
+    }
+    assert_script_run('kubectl describe nodes');
+    assert_script_run("journalctl -u kubelet | tee /dev/$serialdev");
     assert_script_run('kubectl get nodes | grep "Ready" | grep -v "NotReady"');
 }
 
